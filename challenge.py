@@ -9,7 +9,7 @@ def write_to_output(filename, objs, fieldnames):
 
 
 def check_validity(filename,
-					  privacy: str = 'anybody', 
+					  privacy: str = None, 
 					  like_count: int = None, 
 					  play_count: int = None, 
 					  title_length: int = None,
@@ -49,7 +49,10 @@ def check_validity(filename,
 		write_to_output(valid_file, valid, ['id','title','privacy','total_plays','total_comments','total_likes'])
 		write_to_output(invalid_file, invalid, ['id','title','privacy','total_plays','total_comments','total_likes'])
 
-	
+def main():
+	check_validity('clips.csv', privacy='anybody', like_count=20, play_count=200, title_length=30)
+if __name__ == '__main__':
+	main()
 
 
 
