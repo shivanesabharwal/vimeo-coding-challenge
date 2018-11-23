@@ -1,24 +1,29 @@
-import unittest.TestCase
+import unittest
 import challenge
-import random.randint
-class CheckValidityTest(TestCase):
-	def setUp(self):
-		# randomly generate input csv file like clips.csv
-		with open("test.csv", 'w') as testFile:
-			fieldnames = ['id', 'title', 'privacy', 'total_plays', 'total_comments', 'total_likes']
-			self.randomClips = csv.DictWriter(testFile, fieldnames=fieldnames)
-			self.randomClips.writeheader()
-			for i in range(200):
-				self.randomClips.writerow({'id': randint(150000, 300000),
-										  'title': ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(25)),
-										  'privacy': random.choice([True, False]),
-										  'total_plays': randint(0, 600),
-										  'total_comments': randint(0, 50),
-										  'total_likes': randint(0,50)})
-	def test_read_csv(filename):
-		challenge.read_csv(filename)
-		self.rando
+import filecmp
+import csv
+class TestAll(unittest.TestCase):
+	def setUp(self, filename='test.csv'):
+		self.filename = filename
+	
+	def testValidity(self):
+		challenge.check_validity(self.filename, 
+					  privacy='anybody', 
+					  like_count=10, 
+					  play_count=200, 
+					  title_length=30,
+					  valid_file="valid",
+					  invalid_file="invalid")
+		with open('valid.csv', 'r') as f1, open('test_valid.csv', 'r') as f2:
+			for (line_f1, line_f2) in zip(f1, f2):
+				self.assertEqual(line_f1, line_f2)
+
+        		
 
 
+
+# Run all tests
+if __name__ == '__main__':
+    unittest.main()
 
 			
