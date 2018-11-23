@@ -29,15 +29,16 @@ def check_validity(filename,
 		reader = csv.DictReader(f)
 		valid = []
 		invalid = []
-		result = None
+		result = True
 		for row in reader:
 			if privacy is not None:
 				result = row['privacy'] == 'anybody'
 			if like_count is not None:
 				result = result and int(row['total_likes']) > like_count
 			if play_count is not None:
-				result = result and int(row['total_plays']) > play_count
+				result = result and (int(row['total_plays']) > play_count)
 			if title_length is not None:
+				# counts all non whitespace characters
 				result = result and len(re.findall(r"[^\s]", row['title'])) < title_length
 			if comment_count is not None:
 				result = result and row['total_comments'] > comment_count
@@ -50,7 +51,7 @@ def check_validity(filename,
 		write_to_output(invalid_file, invalid, ['id','title','privacy','total_plays','total_comments','total_likes'])
 
 def main():
-	check_validity('clips.csv', privacy='anybody', like_count=20, play_count=200, title_length=30)
+	check_validity('clips.csv', privacy='anybody', like_count=10, play_count=200, title_length=30)
 if __name__ == '__main__':
 	main()
 
