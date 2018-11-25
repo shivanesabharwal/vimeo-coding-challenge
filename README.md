@@ -13,4 +13,6 @@ There is also a test provided in `test_challenge.py`. I used the first 7 rows of
 Final notes:
 Currently, `check_validity` checks a certain type of inequality, e.g. less than, greater than, for each attribute. While I considered using pandas to write a more modular solution, I believe this code is still easy to extend for different inequalities based on user input, maybe from the command line.
 
+Also, this code was written and tested using Python 3.5, so it may be a good idea to configure an environment like such in order to run the script if there are compatibility issues.
+
 Happy Holidays!
