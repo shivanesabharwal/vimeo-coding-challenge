@@ -15,21 +15,22 @@ def check_validity(filename,
 					  title_length: int = None,
 					  comment_count: int = None,
 					  valid_file: str = "valid",
-					  invalid_file: str = "invalid"):
+					  invalid_file: str = "invalid",
+					  output_cols: list = ['id']):
 	"""""
 	This function checks the validity of a given csv file. The keyword arguments are essentially switches
 	that users can "turn on" by providing. If they are provided, the result will match the attributes provided, e.g. 
 	like count above a certain number, or only public videos.
-	One caveat is that they must match the type which is provided in the above function header.
-
-	notes- discuss dictwriter performance, 'extrasaction'=ignore argument, python, opportunities for further dev
+	One caveat is that they must match the type which is provided in the above function header. This makes the code
+	more resilient to user mistakes, given python does not check for type errors at compile time.
 	"""
-	# Write header to csv file
+	# open csv file for analysis	
 	with open(filename, 'r') as f:
 		reader = csv.DictReader(f)
 		valid = []
 		invalid = []
 		result = True
+		# check conditions
 		for row in reader:
 			if privacy is not None:
 				result = row['privacy'] == 'anybody'
@@ -42,13 +43,19 @@ def check_validity(filename,
 				result = result and len(re.findall(r"[^\s]", row['title'])) < title_length
 			if comment_count is not None:
 				result = result and row['total_comments'] > comment_count
-	# put in to valid and invalid lists based on matching filters
+			# put in to valid and invalid lists based on matching filters
+			tmp = {}
 			if result:
-				valid.append(row)
+				for i in output_cols:
+					tmp[i] = row[i]
+				valid.append(tmp)
 			else:
-				invalid.append(row)
-		write_to_output(valid_file, valid, ['id','title','privacy','total_plays','total_comments','total_likes'])
-		write_to_output(invalid_file, invalid, ['id','title','privacy','total_plays','total_comments','total_likes'])
+				for i in output_cols:
+					tmp[i] = row[i]
+				invalid.append(tmp)
+		# write to appropriate valid and invalid files
+		write_to_output(valid_file, valid, output_cols)
+		write_to_output(invalid_file, invalid, output_cols)
 
 def main():
 	check_validity('clips.csv', privacy='anybody', like_count=10, play_count=200, title_length=30)

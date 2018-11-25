@@ -1,6 +1,5 @@
 import unittest
 import challenge
-import filecmp
 import csv
 class TestAll(unittest.TestCase):
 	def setUp(self, filename='test.csv'):
@@ -15,6 +14,9 @@ class TestAll(unittest.TestCase):
 					  valid_file="valid",
 					  invalid_file="invalid")
 		with open('valid.csv', 'r') as f1, open('test_valid.csv', 'r') as f2:
+			for (line_f1, line_f2) in zip(f1, f2):
+				self.assertEqual(line_f1, line_f2)
+		with open('invalid.csv', 'r') as f1, open('test_invalid.csv', 'r') as f2:
 			for (line_f1, line_f2) in zip(f1, f2):
 				self.assertEqual(line_f1, line_f2)
 
