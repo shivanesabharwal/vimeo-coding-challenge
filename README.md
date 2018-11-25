@@ -9,3 +9,8 @@ Some design notes:
 4. One tricky problem was looking at title length. I made the decision to only consider non-whitespace characters in the title, as I didn't think whitespace conveyed anything useful inherently, merely where to separate certain characters. In order to count the number of non whitespace characters, I used a regex that matched everything except those characters, and used the `re.findall` method.
 
 There is also a test provided in `test_challenge.py`. I used the first 7 rows of `clips.csv` and handclassified them into `test_valid.csv` and `test_invalid.csv`. The test can be run by calling `python test_challenge.py`.
+
+Final notes:
+Currently, `check_validity` checks a certain type of inequality, e.g. less than, greater than, for each attribute. While I considered using pandas to write a more modular solution, I believe this code is still easy to extend for different inequalities based on user input, maybe from the command line.
+
+Happy Holidays!
